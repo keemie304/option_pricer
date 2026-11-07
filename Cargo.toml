@@ -1,0 +1,10 @@
+[package]
+name = "option_pricer"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rand =  "0.10.3"
+rand_distr = "0.6.0"
+cdflib = "0.4.4"
+statrs = "0.19.1"

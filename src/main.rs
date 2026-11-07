@@ -1,5 +1,6 @@
 
-use statrs::distribution::{ContinuousCDF, Normal};
+
+use option_pricer::OptionContract;
 
 fn main() {
 
@@ -12,62 +13,18 @@ fn main() {
     };
     let call = a.calc_call_option();
     let put = a.calc_put_option();
+    
+    let d1 = a.calc_d1();
+    println!("D1 is {}",d1);
+    let d2 = a.calc_d2();
+    println!("D2 is {}",d2);
+    
 
     println!("The price of a call option on the stock is: {}",call);
     println!("The price of a put option on the stock is: {}",put);
 
 
 
-
-}
-
-struct OptionContract {
-    underlying: f64,
-    strike: f64,
-    rate: f64,
-    time: f64,
-    volatility: f64,
-}
-impl OptionContract {
-    fn calc_d1(&self) -> f64 {
-        let numerator_1 = (self.underlying / self.strike).ln();
-        let numerator_2 = (self.rate + (self.volatility.powf(2.0)/2.0))* self.time;
-        let denominator = self.volatility * self.time.sqrt();
-
-        let d1 = (numerator_1 + numerator_2) / denominator;
-        d1
-    }
-    fn calc_d2(&self) -> f64 {
-        let d1 = self.calc_d1();
-        let d2 = d1 - (self.volatility * self.time.sqrt());
-
-        d2
-    }
-    fn calc_call_option(&self) -> f64 {
-        println!("Calculating call option price ...");
-        let normal = Normal::new(0.0, 1.0).unwrap();
-
-        let d1 = self.calc_d1();
-        let d2 = self.calc_d2();
-
-        let nd1 = normal.cdf(d1);
-        let nd2 = normal.cdf(d2);
-
-        let call_option_price = self.underlying * nd1 - (self.strike * (-self.rate * self.time).exp() * nd2);
-        call_option_price
-    }
-    fn calc_put_option(&self) -> f64 {
-        let normal = Normal::new(0.0, 1.0).unwrap();
-
-        let d1 = self.calc_d1();
-        let d2 = self.calc_d2();
-
-        let nd1 = normal.cdf(-d1);
-        let nd2 = normal.cdf(-d2);
-
-        let put_option_price = (self.strike * (-self.rate * self.time).exp() * nd2) -  self.underlying * nd1;
-        put_option_price
-    }
 
 }
 /*

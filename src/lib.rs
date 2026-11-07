@@ -1,4 +1,4 @@
-use statrs::distribution::{ContinuousCDF, Normal};
+use statrs::distribution::{Continuous,ContinuousCDF, Normal};
 
 
 pub struct OptionContract {
@@ -24,7 +24,6 @@ impl OptionContract {
         d2
     }
     pub fn calc_call_option(&self) -> f64 {
-        println!("Calculating call option price ...");
         let normal = Normal::new(0.0, 1.0).unwrap();
 
         let d1 = self.calc_d1();
@@ -47,5 +46,37 @@ impl OptionContract {
 
         let put_option_price = (self.strike * (-self.rate * self.time).exp() * nd2) -  self.underlying * nd1;
         put_option_price
+    }
+    //calculating the greeks
+    pub fn calc_call_delta(&self) -> f64 {
+        let d1 = self.calc_d1();
+        let normal = Normal::new(0.0, 1.0).unwrap();
+
+        let delta = normal.cdf(d1);
+        delta
+    }
+    pub fn calc_put_delta(&self) -> f64 {
+        let d1 = self.calc_d1();
+        let normal = Normal::new(0.0, 1.0).unwrap();
+
+        let delta = normal.cdf(d1) -1.0;
+        delta
+    }
+    pub fn calc_gamma(&self) -> f64 {
+        let d1 = self.calc_d1();
+        let normal = Normal::new(0.0, 1.0).unwrap();
+
+        let numerator = normal.pdf(d1);
+        let denominator = self.underlying * self.volatility * self.time.sqrt();
+
+        let gamma = numerator/denominator;
+        gamma
+    }
+    pub fn calc_vega (&self) -> f64 {
+        let d1 = self.calc_d1();
+        let normal = Normal::new(0.0, 1.0).unwrap();
+
+        let vega = self.underlying * (normal.pdf(d1)) * self.time.sqrt();
+        vega
     }
 }

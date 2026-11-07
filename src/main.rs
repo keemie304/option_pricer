@@ -11,17 +11,32 @@ fn main() {
         time: 0.5,
         volatility: 0.4,
     };
+
     let call = a.calc_call_option();
     let put = a.calc_put_option();
-    
-    let d1 = a.calc_d1();
-    println!("D1 is {}",d1);
-    let d2 = a.calc_d2();
-    println!("D2 is {}",d2);
-    
 
-    println!("The price of a call option on the stock is: {}",call);
-    println!("The price of a put option on the stock is: {}",put);
+    let d1 = a.calc_d1();
+    println!("D1 is {:.3}",d1);
+    let d2 = a.calc_d2();
+    println!("D2 is {:.3}",d2);
+
+
+    println!("The price of a call option on the stock is: {:.3}",call);
+    println!("The price of a put option on the stock is: {:.3}",put);
+
+    println!("Calculating the Greeks...");
+
+    let call_delta = a.calc_call_delta();
+    let put_delta = a.calc_put_delta();
+    let gamma = a.calc_gamma();
+    let vega = a.calc_vega();
+
+    println!("The greeks are:\n
+    Call Delta: {:.3}\n
+    Put Delta: {:.3}\n
+    Gamma: {:.3}\n
+    Vega: {:.3}\n
+    ", call_delta, put_delta, gamma, vega);
 
 
 

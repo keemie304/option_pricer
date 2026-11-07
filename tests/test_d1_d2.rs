@@ -23,7 +23,7 @@ fn test_d2() {
         strike: 80.0,
         rate: 0.05,
         time: 0.5,
-        volatility: 0.05,
+        volatility: 0.4,
     };
 
     let actual = option.calc_d2();

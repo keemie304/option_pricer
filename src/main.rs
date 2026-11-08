@@ -30,16 +30,20 @@ fn main() {
     let put_delta = a.calc_put_delta();
     let gamma = a.calc_gamma();
     let vega = a.calc_vega();
+    let call_theta =  a.calc_call_theta();
+    let put_theta = a.calc_put_theta();
+    let call_rho = a.calc_call_rho();
+    let put_rho = a.calc_put_rho();
 
     println!("The greeks are:\n
     Call Delta: {:.3}\n
     Put Delta: {:.3}\n
     Gamma: {:.3}\n
     Vega: {:.3}\n
-    ", call_delta, put_delta, gamma, vega);
-
-
-
+    Call Theta: {:.3}\n
+    Put Theta: {:.3}\n
+    Call Rho: {:.3}\n
+    Put Rho: {:.3}", call_delta, put_delta, gamma, vega, call_theta,put_theta,call_rho,put_rho);
 
 }
 /*

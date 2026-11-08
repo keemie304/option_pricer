@@ -79,4 +79,42 @@ impl OptionContract {
         let vega = self.underlying * (normal.pdf(d1)) * self.time.sqrt();
         vega
     }
+    pub fn calc_call_theta(&self) -> f64 {
+        let d1 = self.calc_d1();
+        let d2 = self.calc_d2();
+        let normal = Normal::new(0.0, 1.0).unwrap();
+
+        let front_equation = (self.underlying * normal.pdf(d1) * self.volatility)/ (2.0 * self.time.sqrt());
+        let back_equation = self.rate * self.strike * (-self.rate*self.time).exp() * normal.cdf(d2);
+
+
+
+        let call_theta = -front_equation - back_equation;
+        call_theta
+    }
+    pub fn calc_put_theta(&self) -> f64 {
+        let d1 = self.calc_d1();
+        let d2 = self.calc_d2();
+        let normal = Normal::new(0.0, 1.0).unwrap();
+
+        let front_equation = (self.underlying * normal.pdf(d1) * self.volatility)/ (2.0 * self.time.sqrt());
+        let back_equation = self.rate * self.strike * (-self.rate*self.time).exp() * normal.cdf(-d2);
+
+        let call_theta = -front_equation + back_equation;
+        call_theta
+    }
+    pub fn calc_call_rho (&self) -> f64 {
+        let d2 = self.calc_d2();
+        let normal = Normal::new(0.0, 1.0).unwrap();
+
+        let call_rho = self.strike * self.time * (-self.rate*self.time).exp() * normal.cdf(d2);
+        call_rho
+    }
+    pub fn calc_put_rho(&self) -> f64 {
+        let d2 = self.calc_d2();
+        let normal = Normal::new(0.0, 1.0).unwrap();
+
+        let put_rho = -self.strike * self.time * (-self.rate*self.time).exp() * normal.cdf(-d2);
+        put_rho
+    }
 }

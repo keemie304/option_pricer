@@ -111,3 +111,15 @@ impl OptionContract {
         put_rho
     }
 }
+
+pub fn check_datatype(input: &str) -> Result<f64, std::num::ParseFloatError> {
+
+    let number: f64 = match input.trim().parse() {
+        Ok(n) => n,
+        Err(e) => {
+            return Err(e);
+        }
+    };
+
+    Ok(number)
+}

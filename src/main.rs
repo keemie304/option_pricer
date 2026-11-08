@@ -1,11 +1,25 @@
-
-
+use std::io;
 use option_pricer::OptionContract;
+use option_pricer::check_datatype;
 
 fn main() {
 
+    let mut underlying = String::new();
+    println!("Enter the current price of the asset");
+
+    io::stdin().read_line(&mut underlying).expect("Failed to read line");
+
+    let number = match check_datatype(&underlying) {
+        Ok(n) => n,
+        Err(e) => {
+            println!("Invalid input: {}", e);
+            return;
+        }
+    };
+
+
     let a = OptionContract{
-        underlying: 100.0,
+        underlying: number,
         strike: 80.0,
         rate: 0.05,
         time: 0.5,

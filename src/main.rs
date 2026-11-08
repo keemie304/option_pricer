@@ -15,9 +15,9 @@ fn main() {
     let call = a.calc_call_option();
     let put = a.calc_put_option();
 
-    let d1 = a.calc_d1();
+    let d1 = a.calc_d_values().0;
     println!("D1 is {:.3}",d1);
-    let d2 = a.calc_d2();
+    let d2 = a.calc_d_values().1;
     println!("D2 is {:.3}",d2);
 
 

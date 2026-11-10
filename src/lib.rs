@@ -46,12 +46,6 @@ impl OptionContract {
             return Err("Volatility must be finite");
         }
 
-
-
-
-
-        
-
         Ok (Self {
             underlying,
             strike,
@@ -134,8 +128,6 @@ impl OptionContract {
         let front_equation = (self.underlying * normal.pdf(d1) * self.volatility)/ (2.0 * self.time.sqrt());
         let back_equation = self.rate * self.strike * (-self.rate*self.time).exp() * normal.cdf(d2);
 
-
-
         let call_theta = -front_equation - back_equation;
         call_theta
     }
@@ -182,9 +174,9 @@ pub fn read_number(prompt: &str) ->  f64 {
         println!("{}", prompt);
 
         let mut input = String::new();
-        
+
         io::stdin().read_line(&mut input).expect("Failed to read line");
-        
+
         match check_datatype(&input) {
             Ok(n) => return n,
             Err(e) => {

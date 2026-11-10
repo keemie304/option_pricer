@@ -1,29 +1,21 @@
-use std::io;
+
 use option_pricer::OptionContract;
-use option_pricer::check_datatype;
+use option_pricer::read_number;
 
 fn main() {
 
-    let mut underlying = String::new();
-    println!("Enter the current price of the asset");
+    let underlying_price = read_number("Enter the underlying asset price:");
+    let strike_price = read_number("Enter the option's strike price:");
+    let rf_rate = read_number("Enter the risk-free rate:");
+    let exp_time = read_number("Enter the option's time to expiration:");
+    let implied_volatility = read_number("Enter the option's implied volatility:");
 
-    io::stdin().read_line(&mut underlying).expect("Failed to read line");
-
-    let number = match check_datatype(&underlying) {
-        Ok(n) => n,
-        Err(e) => {
-            println!("Invalid input: {}", e);
+    let a = match OptionContract::new(underlying_price,strike_price,rf_rate,exp_time,implied_volatility){
+        Ok(contract) => contract,
+        Err(error) => {
+            println!("Invalid option contract: {}",error);
             return;
         }
-    };
-
-
-    let a = OptionContract{
-        underlying: number,
-        strike: 80.0,
-        rate: 0.05,
-        time: 0.5,
-        volatility: 0.4,
     };
 
     let call = a.calc_call_option();
@@ -60,30 +52,4 @@ fn main() {
     Put Rho: {:.3}", call_delta, put_delta, gamma, vega, call_theta,put_theta,call_rho,put_rho);
 
 }
-/*
-fn calc_d1(s: f64, k: f64, r:f64, t: f64,vol:f64) -> f64 {
-    let ln_s_k = (s/k).ln();
-    let part_two = (r+(vol.powi(2)/2.0)) * t;
-    let divisor = vol * (t.sqrt());
 
-    let d1 = (ln_s_k/part_two)/divisor;
-    return d1
-
-}
-fn calc_d2(d1:f64,vol:f64,t:f64) -> f64 {
-    let d2 = d1 - (vol * t.sqrt());
-    return d2
-}
-fn calc_option(s:f64, d1:f64,d2:f64,k:f64,r:f64,t:f64) -> f64 {
-    let normal = Normal::new(0.0, 1.0).unwrap();
-
-    let nd1 = normal.cdf(d1);
-    let nd2 = normal.cdf(d2);
-
-    let option_price = s * nd1 - (k * (E.powf(-r*t)) * nd2);
-    return option_price
-
-}
-
-
- */
